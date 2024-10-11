@@ -4,23 +4,70 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Buffer } from "buffer";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+interface ResumeData {
+  name: string;
+  content: Buffer;
+}
 
 export default function Submit() {
-  const [files, setFiles] = useState<File[]>([]);
-  const [jobDescription, setJobDescription] = useState("");
+  const [topN, setTopN] = useState<number>(1);
+  const [results, setResults] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setFiles(Array.from(e.target.files));
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Files:", files);
-    console.log("Job Description:", jobDescription);
-    // You would typically send this data to your backend here
+    setLoading(true);
+    const { files: resumeFiles } = document.getElementById(
+      "resumes"
+    ) as HTMLInputElement;
+
+    const jobDescriptionElement = document.getElementById(
+      "jobDescription"
+    ) as HTMLTextAreaElement;
+
+    const resumeData: ResumeData[] = [];
+    if (resumeFiles) {
+      await Promise.all(
+        Array.from(resumeFiles).map(async (file) => {
+          const resumeBytes = await file.arrayBuffer();
+          const resumeDataBuffer = Buffer.from(resumeBytes);
+          resumeData.push({
+            name: file.name,
+            content: resumeDataBuffer,
+          });
+        })
+      );
+    }
+
+    try {
+      const response = await fetch("api/filter", {
+        method: "POST",
+        body: JSON.stringify({
+          resumeData,
+          jobDescription: jobDescriptionElement.value,
+          topN,
+        }),
+      });
+      if (response.ok) {
+        const { shortlisted } = await response.json();
+        setResults(shortlisted);
+      } else {
+        throw new Error("Failed to fetch");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,7 +85,6 @@ export default function Submit() {
             type="file"
             accept=".pdf"
             multiple
-            onChange={handleFileChange}
             className="w-full"
           />
         </div>
@@ -51,14 +97,49 @@ export default function Submit() {
           </label>
           <Textarea
             id="jobDescription"
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
             className="w-full h-32"
             placeholder="Enter the job description here..."
           />
         </div>
-        <Button type="submit">Submit</Button>
+        <div>
+          <label htmlFor="topN" className="block text-sm font-medium mb-2">
+            Filter Top N Resumes
+          </label>
+          <Input
+            id="topN"
+            type="number"
+            min="1"
+            value={topN}
+            onChange={(e) => setTopN(parseInt(e.target.value))}
+            className="w-full"
+          />
+        </div>
+        <Button className="w-full py-4" type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Submit"}
+        </Button>
       </form>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="w-full py-4 mt-4" disabled={results.length === 0}>
+            View Top {topN} Resumes
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Top {topN} Resumes</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <ul className="list-disc pl-5">
+              {results.map((fileName, index) => (
+                <li key={index} className="mb-2">
+                  {fileName}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
