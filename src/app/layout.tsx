@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Link from "next/link";
+import { CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,6 +31,38 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="px-4 md:px-6 flex h-14 items-center">
+            <Link href="/" className="flex items-center space-x-2">
+              <CheckCircle className="h-6 w-6" />
+              <span className="font-bold">ResumeFilter</span>
+            </Link>
+            <nav className="ml-auto flex items-center space-x-4 sm:space-x-6">
+              <Link
+                href="#features"
+                className="text-sm font-medium hover:underline"
+              >
+                Features
+              </Link>
+              <Link
+                href="#pricing"
+                className="text-sm font-medium hover:underline"
+              >
+                Pricing
+              </Link>
+              <Link href="#faq" className="text-sm font-medium hover:underline">
+                FAQ
+              </Link>
+              <Link
+                href="/submit"
+                className="text-sm font-medium hover:underline"
+              >
+                Submit
+              </Link>
+              <Button>Get Started</Button>
+            </nav>
+          </div>
+        </header>
         {children}
       </body>
     </html>
