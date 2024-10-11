@@ -57,9 +57,6 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ shortlisted }, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Error processing request" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error }, { status: 500 });
   }
 }
