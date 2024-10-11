@@ -35,7 +35,7 @@ export default function RootLayout({
           <div className="px-4 md:px-6 flex h-14 items-center">
             <Link href="/" className="flex items-center space-x-2">
               <CheckCircle className="h-6 w-6" />
-              <span className="font-bold">ResumeFilter</span>
+              <span className="font-bold">ResuMatch</span>
             </Link>
             <nav className="ml-auto flex items-center space-x-4 sm:space-x-6">
               <Link

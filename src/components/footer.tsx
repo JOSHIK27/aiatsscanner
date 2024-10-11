@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="w-full border-t py-6">
       <div className="flex flex-col items-center justify-between gap-4">
         <p className="text-sm text-muted-foreground">
-          © 2024 ResumeFilter. All rights reserved.
+          © 2024 ResuMatch. All rights reserved.
         </p>
         <nav className="flex gap-4">
           <Link
