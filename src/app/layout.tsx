@@ -53,13 +53,6 @@ export default function RootLayout({
               <Link href="#faq" className="text-sm font-medium hover:underline">
                 FAQ
               </Link>
-              <Link
-                href="/submit"
-                className="text-sm font-medium hover:underline"
-              >
-                Submit
-              </Link>
-              <Button>Get Started</Button>
             </nav>
           </div>
         </header>

@@ -119,27 +119,32 @@ export default function Submit() {
         </Button>
       </form>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="w-full py-4 mt-4" disabled={results.length === 0}>
-            View Top {topN} Resumes
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Top {topN} Resumes</DialogTitle>
-          </DialogHeader>
-          <div className="mt-4">
-            <ul className="list-disc pl-5">
-              {results.map((fileName, index) => (
-                <li key={index} className="mb-2">
-                  {fileName}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {results.length > 0 && (
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              className="w-full py-4 mt-4"
+              disabled={results.length === 0}
+            >
+              View Top {topN} Resumes
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Top {topN} Resumes</DialogTitle>
+            </DialogHeader>
+            <div className="mt-4">
+              <ul className="list-disc pl-5">
+                {results.map((fileName, index) => (
+                  <li key={index} className="mb-2">
+                    {fileName}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }
