@@ -51,8 +51,6 @@ export async function POST(request: NextRequest) {
       includeMetadata: true,
     });
 
-    console.log(resp);
-
     const shortlisted = resp.matches.map((match) => match.id);
 
     return NextResponse.json({ shortlisted }, { status: 200 });

@@ -131,16 +131,31 @@ export default function Submit() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Top {topN} Resumes</DialogTitle>
+              <DialogTitle className="text-2xl font-bold mb-4">
+                Top {topN} Resumes
+              </DialogTitle>
             </DialogHeader>
             <div className="mt-4">
-              <ul className="list-disc pl-5">
+              <ul className="space-y-3">
                 {results.map((fileName, index) => (
-                  <li key={index} className="mb-2">
-                    {fileName}
+                  <li
+                    key={index}
+                    className="flex items-center bg-gray-100 rounded-lg p-3"
+                  >
+                    <span className="flex-shrink-0 w-8 h-8 flex items-center justify-center bg-blue-500 text-white rounded-full mr-3">
+                      {index + 1}
+                    </span>
+                    <span className="text-gray-800 font-medium truncate">
+                      {fileName}
+                    </span>
                   </li>
                 ))}
               </ul>
+            </div>
+            <div className="mt-6 flex justify-end">
+              <Button onClick={() => console.log("Download action")} disabled>
+                Download All (Coming Soon)
+              </Button>
             </div>
           </DialogContent>
         </Dialog>
