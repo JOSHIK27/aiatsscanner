@@ -11,7 +11,11 @@ export default function Faqs() {
       <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12">
         Frequently Asked Questions
       </h2>
-      <Accordion type="single" collapsible className="w-full max-w-3xl mx-auto">
+      <Accordion
+        type="single"
+        collapsible
+        className="w-full max-w-3xl mx-auto px-4"
+      >
         <AccordionItem value="item-1">
           <AccordionTrigger>How accurate is the AI matching?</AccordionTrigger>
           <AccordionContent>
